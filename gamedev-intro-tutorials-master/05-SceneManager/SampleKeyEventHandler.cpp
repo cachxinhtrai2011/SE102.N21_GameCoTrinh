@@ -13,6 +13,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
+	case DIK_UP:
+		mario->SetState(MARIO_STATE_SHOOTUP);
+		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
@@ -46,6 +49,9 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		break;
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT_RELEASE);
+		break;
+	case DIK_UP:
+		mario->SetState(MARIO_STATE_SHOOTUP_RELEASE);
 		break;
 	}
 }

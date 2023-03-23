@@ -308,6 +308,7 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
+	
 
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
