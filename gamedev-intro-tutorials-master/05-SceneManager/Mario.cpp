@@ -196,10 +196,15 @@ int CMario::GetAniIdBig()
 		}
 	else if (isShootuping)
 	{
-		if (nx > 0)
-			aniId = ID_ANI_MARIO_SUT_RIGHT;
-		else
+		if (nx > 0 && vx>0)
+			aniId = ID_ANI_MARIO_SUT_WALK_RIGHT;
+		else if(nx>0)
+			aniId = ID_ANI_MARIO_SUT_WALK_RIGHT;
+		else if(nx<0&&vx<0)
+			aniId = ID_ANI_MARIO_SUT_WALK_LEFT;
+		else if(nx<0)
 			aniId = ID_ANI_MARIO_SUT_LEFT;
+
 	}
 	else if (vx == 0)
 			{
