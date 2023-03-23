@@ -325,7 +325,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_SHOOTUP_RELEASE:
-		if (isShootuping)
+		if (!isShootuping)
 		{
 			isShootuping = false;
 			state = MARIO_STATE_IDLE;
