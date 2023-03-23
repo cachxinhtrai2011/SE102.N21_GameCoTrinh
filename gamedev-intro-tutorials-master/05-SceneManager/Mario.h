@@ -27,6 +27,9 @@
 #define MARIO_STATE_SUT_WALKING_RIGHT	150
 #define MARIO_STATE_SUT_WALKING_LEFT	250
 
+#define MARIO_STATE_SDT_WALKING_RIGHT	151
+#define MARIO_STATE_SDT_WALKING_LEFT	251
+
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_RELEASE_JUMP    301
 
@@ -38,6 +41,9 @@
 
 #define MARIO_STATE_SHOOTUP				650
 #define MARIO_STATE_SHOOTUP_RELEASE		651
+
+#define MARIO_STATE_SHOOTDOWN				660
+#define MARIO_STATE_SHOOTDOWN_RELEASE		661
 
 #pragma region ANIMATION_ID
 
@@ -63,6 +69,8 @@
 #define ID_ANI_MARIO_SUT_LEFT 951
 #define ID_ANI_MARIO_SUT_WALK_RIGHT 960
 #define ID_ANI_MARIO_SUT_WALK_LEFT 961
+#define ID_ANI_MARIO_SDT_WALK_RIGHT 962
+#define ID_ANI_MARIO_SDT_WALK_LEFT 963
 
 #define ID_ANI_MARIO_BRACE_RIGHT 1000
 #define ID_ANI_MARIO_BRACE_LEFT 1001
@@ -115,6 +123,7 @@ class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
 	BOOLEAN isShootuping;
+	BOOLEAN isShootdowning;
 
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -138,7 +147,7 @@ public:
 	{
 		isSitting = false;
 		isShootuping = false;
-
+		isShootdowning = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 

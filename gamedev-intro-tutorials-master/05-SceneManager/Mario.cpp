@@ -187,25 +187,40 @@ int CMario::GetAniIdBig()
 				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
 		}
 	}
-	else if (isSitting)
+	/*else if (isSitting)
 		{
 			if (nx > 0)
 				aniId = ID_ANI_MARIO_SIT_RIGHT;
 			else
 				aniId = ID_ANI_MARIO_SIT_LEFT;
+		}*/
+	else if (isSitting)
+	{
+		if (nx > 0 && vx > 0)
+		{
+			aniId = ID_ANI_MARIO_SDT_WALK_RIGHT;
 		}
+		else if (nx > 0)
+			aniId = ID_ANI_MARIO_SIT_RIGHT;
+		else if (nx < 0 && vx < 0)
+			aniId = ID_ANI_MARIO_SDT_WALK_LEFT;
+		else if (nx < 0)
+			aniId = ID_ANI_MARIO_SIT_LEFT;
+
+	}
 	else if (isShootuping)
 	{
 		if (nx > 0 && vx>0)
 			aniId = ID_ANI_MARIO_SUT_WALK_RIGHT;
 		else if(nx>0)
-			aniId = ID_ANI_MARIO_SUT_WALK_RIGHT;
+			aniId = ID_ANI_MARIO_SUT_RIGHT;
 		else if(nx<0&&vx<0)
 			aniId = ID_ANI_MARIO_SUT_WALK_LEFT;
 		else if(nx<0)
 			aniId = ID_ANI_MARIO_SUT_LEFT;
 
 	}
+
 	else if (vx == 0)
 			{
 				if (nx > 0) aniId = ID_ANI_MARIO_IDLE_RIGHT;
@@ -250,7 +265,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -335,6 +350,23 @@ void CMario::SetState(int state)
 			isShootuping = false;
 			state = MARIO_STATE_IDLE;
 			//y -= MARIO_SIT_HEIGHT_ADJUST;
+		}
+		break;
+
+	case MARIO_STATE_SHOOTDOWN:
+		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
+		{
+			state = MARIO_STATE_IDLE;
+			isShootdowning = true;
+			vx = 0; vy = 0.0f;
+		}
+		break;
+
+	case MARIO_STATE_SHOOTDOWN_RELEASE:
+		if (isShootdowning)
+		{
+			isShootdowning = false;
+			state = MARIO_STATE_IDLE;
 		}
 		break;
 
