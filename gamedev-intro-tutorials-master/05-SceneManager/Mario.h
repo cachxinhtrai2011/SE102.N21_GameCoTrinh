@@ -93,8 +93,8 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
-#define MARIO_BIG_BBOX_WIDTH  14
-#define MARIO_BIG_BBOX_HEIGHT 24
+#define MARIO_BIG_BBOX_WIDTH  22
+#define MARIO_BIG_BBOX_HEIGHT 32
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
@@ -109,6 +109,8 @@
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
+	BOOLEAN isShootuping;
+
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -130,6 +132,8 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
+		isShootuping = false;
+
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 

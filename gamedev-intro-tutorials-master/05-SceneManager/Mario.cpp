@@ -187,21 +187,26 @@ int CMario::GetAniIdBig()
 				aniId = ID_ANI_MARIO_JUMP_WALK_LEFT;
 		}
 	}
-	else
-		if (isSitting)
+	else if (isSitting)
 		{
 			if (nx > 0)
 				aniId = ID_ANI_MARIO_SIT_RIGHT;
 			else
 				aniId = ID_ANI_MARIO_SIT_LEFT;
 		}
+	else if (isShootuping)
+	{
+		if (nx > 0)
+			aniId = ID_ANI_MARIO_SUT_RIGHT;
 		else
-			if (vx == 0)
+			aniId = ID_ANI_MARIO_SUT_LEFT;
+	}
+	else if (vx == 0)
 			{
 				if (nx > 0) aniId = ID_ANI_MARIO_IDLE_RIGHT;
 				else aniId = ID_ANI_MARIO_IDLE_LEFT;
 			}
-			else if (vx > 0)
+	else if (vx > 0)
 			{
 				if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
@@ -210,7 +215,8 @@ int CMario::GetAniIdBig()
 				else if (ax == MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
 			}
-			else // vx < 0
+			
+	else // vx < 0
 			{
 				if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
@@ -308,7 +314,24 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
-	
+	case MARIO_STATE_SHOOTUP:
+		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
+		{
+			state = MARIO_STATE_IDLE;
+			isShootuping = true;
+			vx = 0; vy = 0.0f;
+			//y += MARIO_SIT_HEIGHT_ADJUST;
+		}
+		break;
+
+	case MARIO_STATE_SHOOTUP_RELEASE:
+		if (isShootuping)
+		{
+			isShootuping = false;
+			state = MARIO_STATE_IDLE;
+			//y -= MARIO_SIT_HEIGHT_ADJUST;
+		}
+		break;
 
 	case MARIO_STATE_IDLE:
 		ax = 0.0f;
