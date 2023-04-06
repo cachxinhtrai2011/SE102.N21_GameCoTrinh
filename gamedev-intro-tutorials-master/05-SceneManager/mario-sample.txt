@@ -19,3 +19,4 @@ height	240
 20	textures\misc.png
 30	textures\Player.png
 31	textures\Player1.png
+32 	textures\ContraEnemies.png
