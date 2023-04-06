@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Soldier.h"
 #include "Platform.h"
+#include "Sniper.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -140,6 +141,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_SOLDIER: obj = new CSOLDIER(x, y); break;
+	case OBJECT_TYPE_SNIPER: obj = new CSNIPER(x, y); break;
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

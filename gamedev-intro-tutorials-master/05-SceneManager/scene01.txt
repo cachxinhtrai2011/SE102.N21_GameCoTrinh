@@ -6,6 +6,7 @@ coin.txt
 goomba.txt
 cloud.txt
 soldier.txt
+sniperenemy.txt
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -51,3 +52,5 @@ soldier.txt
 
 #Soldier
 6	80	10
+#Sniper
+7	100	10

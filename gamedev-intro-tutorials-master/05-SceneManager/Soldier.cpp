@@ -5,7 +5,7 @@ CSOLDIER::CSOLDIER(float x, float y) :CGameObject(x, y)
 	this->ax = 0;
 	this->ay = SOLDIER_GRAVITY;
 	die_start = -1;
-	SetState(SOLDIER_STATE_JUMP);
+	SetState(SOLDIER_STATE_RUNNING_RIGHT);
 }
 
 void CSOLDIER::GetBoundingBox(float& left, float& top, float& right, float& bottom)
