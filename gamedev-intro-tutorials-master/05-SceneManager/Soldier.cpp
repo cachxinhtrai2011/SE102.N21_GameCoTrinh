@@ -3,7 +3,8 @@
 CSOLDIER::CSOLDIER(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = SOLDIER_GRAVITY;
+	this->ay = 0;
+	//this->ay = SOLDIER_GRAVITY;
 	die_start = -1;
 	SetState(SOLDIER_STATE_RUNNING_RIGHT);
 }
@@ -70,9 +71,14 @@ void CSOLDIER::Render()
 	{
 		aniId = ID_ANI_SOLDIER_JUMP;
 	}
+	else if (state == SOLDIER_STATE_FIRE_RIGHT)
+	{
+		aniId = ID_ANI_SOLDIER_FIRE_RIGHT;
+	}
+
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSOLDIER::SetState(int state)
@@ -88,13 +94,7 @@ void CSOLDIER::SetState(int state)
 		ay = 0;
 		break;
 	case SOLDIER_STATE_RUNNING_RIGHT:
-		vx = -SOLDIER_WALKING_SPEED;
 		break;
-	case SOLDIER_STATE_FIRE_RIGHT:
-		vx = -SOLDIER_WALKING_SPEED;
-		break;
-	case SOLDIER_STATE_LAY_DOWN:
-		vx = -SOLDIER_WALKING_SPEED;
-		break;
+
 	}
 }
