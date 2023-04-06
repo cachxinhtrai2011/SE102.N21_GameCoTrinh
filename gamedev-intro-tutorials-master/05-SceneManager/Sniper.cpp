@@ -3,9 +3,9 @@
 CSNIPER::CSNIPER(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
-	this->ay = SNIPER_GRAVITY;
+	this->ay = 0;
 	die_start = -1;
-	SetState(SNIPER_STATE_SNIPER_DEAD);
+	SetState(SNIPER_STATE_SHOOTING_DOWN_RIGHT);
 }
 
 void CSNIPER::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -72,7 +72,7 @@ void CSNIPER::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSNIPER::SetState(int state)
@@ -88,7 +88,6 @@ void CSNIPER::SetState(int state)
 		ay = 0;
 		break;
 	case SNIPER_STATE_SHOOTING_DOWN_RIGHT:
-		vx = -SNIPER_WALKING_SPEED;
 		break;
 	}
 }

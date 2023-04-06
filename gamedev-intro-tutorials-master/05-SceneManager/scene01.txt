@@ -51,6 +51,6 @@ sniperenemy.txt
 #50	300	110	316	140	2
 
 #Soldier
-6	80	10
+6	50	50
 #Sniper
-7	100	10
+7	100	50
