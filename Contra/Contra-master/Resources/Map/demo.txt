@@ -1,0 +1,14 @@
+[SETTINGS]
+start	1
+#width	4000
+#height	240
+
+#id	type	file
+# type: 0: intro, 1: play scene 
+[SCENES]
+1	.\Resources\Map\stage1.txt	1
+
+# id	file 
+[TEXTURES]
+10000	Resources\Map\rsz_1stage1_tilemap_bank.png
+-100	Resources\Images\bbox.png
