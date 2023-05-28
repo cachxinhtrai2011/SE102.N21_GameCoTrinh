@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{5f75ff47-f0ed-4895-bd2e-fc2c8b3a2746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Enemies">
+      <UniqueIdentifier>{d56c7464-e6e2-4516-afbb-23dfac9f1ff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Bill">
+      <UniqueIdentifier>{d3afd504-9242-4828-9c78-c823e85c742f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\PlatForm">
+      <UniqueIdentifier>{fb15a4ce-604f-4c96-8a57-3c5f6de7cec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Items">
+      <UniqueIdentifier>{46111611-a52e-43a2-8603-10ac2aef8957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{6c8ebd9f-f468-4ae8-81e2-4e863176e1f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KeyHandler">
+      <UniqueIdentifier>{fbfa4a7e-7b2c-479d-a59f-9cd7233fba83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{b286cfe2-aa35-4ea1-8c6d-f68f8b829a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{377d011d-61be-4823-bebe-48cf9e7af60f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{f36152bf-77f8-4de0-9d5a-594c575aee24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{c026bc83-c73b-410d-96ef-b4d3d8e1f9fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuadTree">
+      <UniqueIdentifier>{27f6e80d-08e6-4e26-a078-bd48e9bddc1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main Game">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="GameObject\Bill\Bullet and Gun">
+      <UniqueIdentifier>{12ff2fd3-5c66-4dce-8892-efa7c2840df1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Bill\Bullet and Gun\WallTurrets">
+      <UniqueIdentifier>{8c28a655-9b7b-4edb-bab1-de575b40ea84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Bill\Bullet and Gun\BillNormalGun">
+      <UniqueIdentifier>{c9e83a46-bed1-46f0-b9c1-910eeb909943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Portal">
+      <UniqueIdentifier>{534c3d95-4892-45dc-af55-786e339faf77}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Main Game</Filter>
+    </ClCompile>
+    <ClCompile Include="BossStage1.cpp">
+      <Filter>GameObject\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Soldier.cpp">
+      <Filter>GameObject\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Sniper.cpp">
+      <Filter>GameObject\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Canon.cpp">
+      <Filter>GameObject\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Bill.cpp">
+      <Filter>GameObject\Bill</Filter>
+    </ClCompile>
+    <ClCompile Include="BillInputHandler.cpp">
+      <Filter>GameObject\Bill</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject\Bill\Bullet and Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="Bridge.cpp">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClCompile>
+    <ClCompile Include="Grass.cpp">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClCompile>
+    <ClCompile Include="AirCraft.cpp">
+      <Filter>GameObject\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>KeyHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>KeyHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScreen.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="HiddenSniper.cpp">
+      <Filter>GameObject\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockObject.cpp">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClCompile>
+    <ClCompile Include="Falcon.cpp">
+      <Filter>GameObject\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="LAirCraft.cpp">
+      <Filter>GameObject\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="RockFall.cpp">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="GunRotation.cpp">
+      <Filter>GameObject\Bill\Bullet and Gun\WallTurrets</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalGun.cpp">
+      <Filter>GameObject\Bill\Bullet and Gun\BillNormalGun</Filter>
+    </ClCompile>
+    <ClCompile Include="BillBullet.cpp">
+      <Filter>GameObject\Bill\Bullet and Gun\BillNormalGun</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>GameObject\Bill\Bullet and Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>GameObject\Portal</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Soldier.h">
+      <Filter>GameObject\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Sniper.h">
+      <Filter>GameObject\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossStage1.h">
+      <Filter>GameObject\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Canon.h">
+      <Filter>GameObject\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Bill.h">
+      <Filter>GameObject\Bill</Filter>
+    </ClInclude>
+    <ClInclude Include="BillInputHandler.h">
+      <Filter>GameObject\Bill</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject\Bill\Bullet and Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>GameObject\Bill\Bullet and Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="Grass.h">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClInclude>
+    <ClInclude Include="Bridge.h">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClInclude>
+    <ClInclude Include="AirCraft.h">
+      <Filter>GameObject\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationFrame.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>KeyHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>KeyHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScreen.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="HiddenSniper.h">
+      <Filter>GameObject\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockObject.h">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClInclude>
+    <ClInclude Include="Falcon.h">
+      <Filter>GameObject\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="LAirCraft.h">
+      <Filter>GameObject\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="RockFall.h">
+      <Filter>GameObject\PlatForm</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetID.h">
+      <Filter>Main Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GunRotation.h">
+      <Filter>GameObject\Bill\Bullet and Gun\WallTurrets</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalGun.h">
+      <Filter>GameObject\Bill\Bullet and Gun\BillNormalGun</Filter>
+    </ClInclude>
+    <ClInclude Include="BillBullet.h">
+      <Filter>GameObject\Bill\Bullet and Gun\BillNormalGun</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>GameObject\Portal</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resources\Map\stage1_tilemap.txt" />
+  </ItemGroup>
+</Project>
