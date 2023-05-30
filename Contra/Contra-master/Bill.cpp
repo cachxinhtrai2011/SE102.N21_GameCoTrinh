@@ -484,5 +484,4 @@ void CBill::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	}
 	right = x + 21;
 	bottom = y - 25;
-
 }
