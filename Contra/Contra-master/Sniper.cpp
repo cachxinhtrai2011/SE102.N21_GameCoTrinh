@@ -1,5 +1,8 @@
 #include "Sniper.h"
 #include "Bill.h"
+#include "RifleBullet.h"
+
+#define RECOIL_TIME 3000
 
 extern CBill* bill;
 void CSniper::Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject)
@@ -8,9 +11,19 @@ void CSniper::Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject)
 		faceDirection = -1;
 	else
 		faceDirection = 1;
+	if (state == SNIPER_STATE_SHOT && GetTickCount64() -lastShot >= RECOIL_TIME )
+	{
+		lastShot = GetTickCount64();
+		if (bill->GetY() - y >= -100)
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35f, 0.01f, 1));
+		else if (bill->GetY() - y <= 100)
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35, -0.35f, 1));
+		else
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35, 0.0f, 1));
+	}
 	if (abs(bill->GetX() - x) <= 100)
 		SetState(SNIPER_STATE_SHOT);
-	else
+	else if(state != SNIPER_STATE_NORMAl)
 		SetState(SNIPER_STATE_NORMAl);
 }
 

@@ -5,8 +5,9 @@ class CSniper: public CGameObject
 {
 protected:
 	int faceDirection = -1;
+	long lastShot;
 public:
-	CSniper(float x, float y) : CGameObject(x, y) { state = SNIPER_STATE_NORMAl; }
+	CSniper(float x, float y) : CGameObject(x, y) { state = SNIPER_STATE_NORMAl; lastShot = -1; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject);
 	void Render();
 	static void LoadAnimation();

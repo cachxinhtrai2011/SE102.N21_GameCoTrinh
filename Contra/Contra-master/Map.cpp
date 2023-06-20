@@ -73,12 +73,28 @@ void CMap::Render()
 			if (index < TotalTiles)
 			{
 				float xDraw = float(CurrentColumn * TILE_WIDTH) + float(startX * TILE_WIDTH);
-				float yDraw = float(CurrentRow * TILE_HEIGHT) - float(startY * TILE_HEIGHT);
+				float yDraw = float((this->TotalRowsOfMap - CurrentRow )* TILE_HEIGHT) - float(startY * TILE_HEIGHT);
 				//if (checkObjectInCamera(xDraw, yDraw)) {
-					Tiles.at(index)->Draw(xDraw + 8, yDraw + 45);
+					Tiles.at(index)->Draw(xDraw - 9.0f , yDraw - 1.0f);
 				//}
 			}
 		}
+
+	//for (int CurrentRow = TotalRowsOfMap - 1; CurrentRow >= 0; CurrentRow--)
+	//	for (int CurrentColumn = FirstColumn; CurrentColumn <= LastColumn; CurrentColumn++)
+	//	{
+	//		int index = TileMap[CurrentRow][CurrentColumn] - 1;
+	//		if (index < TotalTiles)
+	//		{
+	//			float xDraw = float(CurrentColumn * TILE_WIDTH) + float(startX * TILE_WIDTH);
+	//			float yDraw = float(CurrentRow * TILE_HEIGHT) - float(startY * TILE_HEIGHT);
+	//			//if (checkObjectInCamera(xDraw, yDraw)) {
+	//			D3DXVECTOR2 pos = setWorldToSceen(D3DXVECTOR2(xDraw, yDraw));
+	//			Tiles.at(index)->Draw(xDraw -9.0f,pos.y - 9);
+	//			//}
+	//		}
+	//	}
+
 }
 
 void CMap::SetTileMapData(int** TileMapData)

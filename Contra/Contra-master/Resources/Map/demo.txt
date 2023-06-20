@@ -1,14 +1,18 @@
 [SETTINGS]
-start	1
+start	0
 #width	4000
 #height	240
 
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
+0	.\Resources\Map\Intro1.txt	3
 1	.\Resources\Map\stage1.txt	1
+2	.\Resources\Map\stage3.txt	1
 
 # id	file 
 [TEXTURES]
 10000	Resources\Map\rsz_1stage1_tilemap_bank.png
--100	Resources\Images\bbox.png
+10001	Resources\Map\stage3.png
+[FONTS]
+0	.\Resources\Fonts\FontFull.png

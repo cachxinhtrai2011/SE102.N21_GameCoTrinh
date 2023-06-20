@@ -2,38 +2,45 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "AssetID.h"
+#include "PlayScreen.h"
+#include "Game.h"
+#include "ObjectExplosion.h"
+#include "Bill.h"
 class CAirCraft: public CGameObject
 {
 private:
-	float A;
-	float time;
-	float omega;
-	float cycle;
-	float startX;
 public:
-	CAirCraft(float x, float y, float vx = 0.0f, float vy = 0.35f, float omega = 0.005f, float A = 50.0f) : CGameObject(x, y)
-	{
-		startX = x;
-		this->vx = vx;
-		this->vy = vy;
-		this->omega = omega;
-		cycle = 2 * PI / omega;
-		time = 0;
-		this->A = A;
-	}
+	CAirCraft(float x, float y) : CGameObject(x, y){}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject = NULL)
 	{
-		time += dt;
-		time = (float)((int)time % (int)cycle);
-		x = startX + A * cos(omega * time);
-		y = y + vy;
+		CCollision::GetInstance()->Process(this, dt, gameObject);
 	}
-	virtual void HandleInput() {};
 	static void LoadAnimation()
 	{
+		if (CTextures::GetInstance()->Get(AIRCRAFT_TEXTURE_ID) != NULL)
+			return;
 		CTextures* textures = CTextures::GetInstance();
 		textures->Add(AIRCRAFT_TEXTURE_ID, L"./Resources/Images/aircraft.png");
 	}
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual int IsCollidable() { return 1; }
+	virtual int IsBlocking() { return 0; }
+	virtual void OnNoCollision(DWORD dt) {
+		x += vx * dt;
+		y += vy * dt;
+		vy += Bill_GRAVITY;
+	}
+
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
+	{
+		if (e->ny != 0 && e->obj->IsBlocking())
+			vy = 0;
+		if (dynamic_cast<CBill*>(e->obj))
+		{
+			Deleted = 1;
+			this->PowerUp((CBill*)e->obj);
+		}
+	}
+	virtual void PowerUp(CBill* bill) {}
 };
 

@@ -1,0 +1,7 @@
+[TILEMAP]
+Resources\Map\stage3_tilemap.txt
+[OBJECTS]
+#BILL
+1	10	100
+#BLOCK OBJECT
+9998	0	9	16

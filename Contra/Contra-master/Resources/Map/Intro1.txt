@@ -1,0 +1,5 @@
+[BACKGROUND]
+Resources\Images\BeginState.png
+[TEXT]
+stage	90	160
+jungle	90	140

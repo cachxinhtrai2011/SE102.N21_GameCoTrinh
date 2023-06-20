@@ -1,12 +1,16 @@
 #include "Collision.h"
 #include "GameObject.h"
-
+#include "Bullet.h"
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
 
 CCollision* CCollision::__instance = NULL;
 
+BOOLEAN IsNotBlockable(LPCOLLISIONEVENT e)
+{
+	return !(e->obj->IsBlocking() && e->src_obj->IsBlocking());
+}
 CCollision* CCollision::GetInstance()
 {
 	if (__instance == NULL) __instance = new CCollision();
@@ -141,7 +145,6 @@ LPCOLLISIONEVENT CCollision::SweptAABB(LPGAMEOBJECT objSrc, DWORD dt, LPGAMEOBJE
 
 	objSrc->GetBoundingBox(ml, mt, mr, mb);
 	objDest->GetBoundingBox(sl, st, sr, sb);
-
 	SweptAABB(
 		ml, mt, mr, mb,
 		dx, dy,
@@ -164,7 +167,6 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	for (UINT i = 0; i < objDests->size(); i++)
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
-
 		if (e->WasCollided()==1)
 			coEvents.push_back(e);
 		else
@@ -240,6 +242,10 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	}
 	else
 	{
+		for (int i = 0; i < coEvents.size(); i++)
+			if (IsNotBlockable(coEvents.at(i)))
+				coEvents.at(i)->src_obj->OnCollisionWith(coEvents.at(i), dt);
+		vector<LPCOLLISIONEVENT>::iterator end =  std::remove_if(coEvents.begin(), coEvents.end(), IsNotBlockable);
 		Filter(objSrc, coEvents, colX, colY);
 		float x, y, vx, vy, dx, dy;
 		objSrc->GetPosition(x, y);
@@ -348,7 +354,5 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 		objSrc->OnCollisionWith(e);			
 	}
-
-
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }

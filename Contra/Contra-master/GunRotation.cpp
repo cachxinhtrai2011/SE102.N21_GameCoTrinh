@@ -1,28 +1,17 @@
 #include "GunRotation.h"
 #include "Bill.h"
+#include "RifleBullet.h"
 #include "Utils.h"
 extern CBill* bill;
+#define GUN_RECOIL_TIME 3000
 void CGunRotation::Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject)
 {
-	if (state == GUNROTATION_STATE_NORMAL)
+	CCollision::GetInstance()->Process(this, dt, gameObject);
+	if (state == GUNROTATION_STATE_NORMAL && GetTickCount64() - lastShoot > GUN_RECOIL_TIME)
 	{
-		if (GetTickCount64() - lastTurn >= GUN_ROTATION_DELAY && lastTurn != -1)
-		{
-			lastTurn = GetTickCount64();
-			float left, top, down, right;
-			bill->GetBoundingBox(left, top, down, right);
-			float billWidth = right - left;
-			float billHeight = down - top;
-			radius = -Radius(left + billWidth / 2, top + billHeight / 2, x + 16, y + 16);
-		}
+		lastShoot = GetTickCount64();
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x + 10.0f, y - 8.0f , -0.2, 0.0f, 1));
 	}
-	if (abs(bill->GetX() - x) <= 100 && state == GUNROTATION_STATE_HIDDEN)
-	{
-		this->SetState(GUNROTATION_STATE_NORMAL);
-		lastTurn = GetTickCount64() + 200;
-	}
-	if (abs(bill->GetX() - x) > 100 && state == GUNROTATION_STATE_NORMAL)
-		this->SetState(GUNROTATION_STATE_HIDDEN);
 }
 
 void CGunRotation::Render()
@@ -182,21 +171,56 @@ void CGunRotation::SetState(int state)
 		case GUNROTATION_STATE_HIDDEN:
 		{
 			CAnimations::GetInstance()->Get(ID_ANI_GUNROTATION_HIDDEN)->SetStartAnimation(CAnimations::GetInstance()->Get(ID_ANI_GUNROTATION_SHOW));
+			hp = 999999;
 			break;
 		}
 		case GUNROTATION_STATE_NORMAL:
 		{
 			CAnimations::GetInstance()->Get(ID_ANI_GUNROTATION_SHOT_0)->SetStartAnimation(CAnimations::GetInstance()->Get(ID_ANI_GUNROTATION_SHOW));
+			hp = 3;
 			break;
 		}
 	}
 	CGameObject::SetState(state);
 }
 
+void CGunRotation::OnNoCollision(DWORD dt)
+{
+	if (state == GUNROTATION_STATE_NORMAL)
+	{
+		if (GetTickCount64() - lastTurn >= GUN_ROTATION_DELAY && lastTurn != -1)
+		{
+			lastTurn = GetTickCount64();
+			float left, top, down, right;
+			bill->GetBoundingBox(left, top, down, right);
+			float billWidth = right - left;
+			float billHeight = down - top;
+			radius = -Radius(left + billWidth / 2, top + billHeight / 2, x + 16, y + 16);
+		}
+	}
+	if (abs(bill->GetX() - x) <= 100 && state == GUNROTATION_STATE_HIDDEN)
+	{
+		this->SetState(GUNROTATION_STATE_NORMAL);
+		lastTurn = GetTickCount64() + 200;
+	}
+	if (abs(bill->GetX() - x) > 100 && state == GUNROTATION_STATE_NORMAL)
+		this->SetState(GUNROTATION_STATE_HIDDEN);
+}
+
 void CGunRotation::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
+	left = x + 10.0f;
 	top = y;
-	right = x + 16;
-	bottom = y + 16;
+	right = left + 23.0f;
+	bottom = top - 32.0f;
+}
+
+void CGunRotation::GetHit(int damage)
+{
+	hp -= damage;
+	if (hp <= 0)
+	{
+		Deleted = 1;
+		((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObjectToQuadTree(new CObjectExplosion(x, y));
+	}
 }

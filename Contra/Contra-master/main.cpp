@@ -11,22 +11,17 @@
 #include "Bill.h"
 #include "Grass.h"
 #include <vector>
-#include "Soldier.h"
-#include "GunRotation.h"
-#include "Sniper.h"
-#include "HiddenSniper.h"
-#include "RockFall.h"
-#include "Canon.h"
 #define TEXTURE_PATH L"./Resources/Images/bill_animation.png"
 #define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
-#define SCREEN_WIDTH 300
-#define SCREEN_HEIGHT 264
+#define SCREEN_WIDTH 255
+#define SCREEN_HEIGHT 255
 
 CTextures* tex;
 CAnimations* animation;
 CSprites* sprite;
 CBill* bill = NULL;
 CBullet* bullet;
+int done = 0;
 void Render()
 {
 	CGame* g = CGame::GetInstance();
@@ -52,7 +47,7 @@ void Render()
 		//g->Draw(10, 10, texMisc, 300, 117, 316, 133);
 		//for (int i = 0; i < g->gameObjects.size(); i++)
 		//	g->gameObjects[i]->Render();
-		((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->Render();
+		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
 		pSwapChain->Present(0, 0);
@@ -89,7 +84,6 @@ void Run()
 	//	Sleep(10);
 	//}
 	MSG msg;
-	int done = 0;
 	ULONGLONG frameStart = GetTickCount64();
 	DWORD tickPerFrame = 3600 / MAX_FRAME_RATE;
 
@@ -111,8 +105,9 @@ void Run()
 		DWORD dt = (DWORD)(now - frameStart);
 		if (dt >= tickPerFrame)
 		{
+			if (CGame::GetInstance()->IsSceneChange())
+				CGame::GetInstance()->SwitchScene();
 			frameStart = now;
-
 			CGame::GetInstance()->ProcessKeyboard();
 			Update(dt);
 			Render();
@@ -130,16 +125,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInstance, LPSTR lpCmdLine,
 	game->InitKeyboard();
 	game->Load(L"./Resources/Map/demo.txt");
 	bill = (CBill*)game->GetCurrentScene()->GetPlayer();
-	CBill::LoadAnimation();
 	
-	CGrass::LoadAnimation();
-	CGunRotation::LoadAnimation();
-	CSoldier::LoadAnimation();
-	CSniper::LoadAnimation();
 	//game->InitKeyboard();
 	SetWindowPos(game->GetHWnd(), 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 	//SetWindowPos(game->GetHWnd(), 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
-
 	Run(); 
 	return 0;
 }

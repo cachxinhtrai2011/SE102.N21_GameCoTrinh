@@ -14,10 +14,17 @@ CBillInputHandler::CBillInputHandler(): CInputHandler()
 	KeyToListen.push_back(DIK_RIGHTARROW); 
 	KeyToListen.push_back(DIK_S);
 	KeyToListen.push_back(DIK_0); 
+	KeyToListen.push_back(DIK_1);
+	KeyToListen.push_back(DIK_2);
+	KeyToListen.push_back(DIK_3);
+	KeyToListen.push_back(DIK_5);
 	KeyToListen.push_back(DIK_A);
+	KeyToListen.push_back(DIK_K);
 }
 void CBillInputHandler::HandleInput(CInput* input)
 {
+	if (bill->GetState() == BILL_STATE_DEAD)
+		return;
 	switch (input->GetType())
 	{
 	case KEY_CLICK:
@@ -69,9 +76,29 @@ void CBillInputHandler::onKeyClick(int keyCode)
 		bill->SetState(BILL_STATE_JUMP);
 		return;
 	}
-	/*if (keyCode == DIK_0)
+	if (keyCode == DIK_0)
 	{
 		bill->SetGun(new CNormalGun());
+		return;
+	}
+	/*if (keyCode == DIK_1)
+	{
+		bill->SetGun(new CCircularGun());
+		return;
+	}
+	if (keyCode == DIK_2)
+	{
+		bill->SetGun(new CSpreadGun());
+		return;
+	}*/
+	/*if (keyCode == DIK_3)
+	{
+		bill->SetGun(new CFireGun());
+		return;
+	}*/
+	/*if (keyCode == DIK_5)
+	{
+		bill->SetGun(new CRifleGun());
 		return;
 	}*/
 	if (keyCode == DIK_A)
@@ -102,10 +129,15 @@ void CBillInputHandler::onKeyPress(int keyCode)
 	}
 	if (keyCode == DIK_Z)
 		bill->SetState(BILL_STATE_LAYDOWN);
-	/*if (keyCode == DIK_4)
+	if (keyCode == DIK_4)
 	{
 		CGame::GetInstance()->gameObjects.push_back(new CLAirCraft(bill->GetX(), 0));
-	}*/
+	}
+	if (keyCode == DIK_K) {
+		CGame::GetInstance()->InitiateSwitchScene(CGame::GetInstance()->GetCurrentSceneID() + 1);
+		CGame::GetInstance()->SwitchScene();
+		return;
+	}
 }
 
 void CBillInputHandler::onKeyRelease(int keyCode)
@@ -125,9 +157,9 @@ void CBillInputHandler::onKeyRelease(int keyCode)
 		bill->shotDirection = 0;
 	if (keyCode == DIK_DOWNARROW)
 		bill->shotDirection = 0;
-	//if (keyCode == DIK_Z)
-	//{
-	//	//bill->SetPosition(bill->GetX(), bill->GetY() - 10);
-	//	bill->SetState(BILL_STATE_IDLE);
-	//}
+	if (keyCode == DIK_Z)
+	{
+		bill->SetPosition(bill->GetX(), bill->GetY() + 20.0f);
+		bill->SetState(BILL_STATE_IDLE);
+	}
 }

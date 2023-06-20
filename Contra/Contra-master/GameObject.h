@@ -8,8 +8,7 @@
 #include "Textures.h"
 using namespace std;
 
-#define ID_TEX_BBOX -100  // special texture to draw object bounding box
-#define BBOX_ALPHA 0.25f 
+#define ID_TEX_BBOX -100		// special texture to draw object bounding box
 
 class CGame;
 class CGameObject
@@ -24,6 +23,8 @@ protected:
 	int nx;	 
 	int state;
 	int Deleted = 0;
+	int dieStart = 0;
+	int hp;
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeedX(float vx) { this->vx = vx; }
@@ -39,8 +40,10 @@ public:
 	virtual void HandleInput() {};
 	virtual void Render() = 0;
 	virtual void DeleteFromGameObjects();
+	virtual void GetHit(int damage = 0) {}
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	float GetX() { return x; }
+	virtual int IsEnemy() { return 1; }
 	float GetY() { return y; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}
 	//
@@ -53,7 +56,7 @@ public:
 
 	// When collision with an object has been detected (triggered by CCollision::Process)
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt = 0) {};
-	virtual int IsBlocking() { return 1; };
+	virtual int IsBlocking() { return 0; };
 
 
 	void RenderBoundingBox();

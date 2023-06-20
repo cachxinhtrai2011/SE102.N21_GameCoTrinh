@@ -15,8 +15,14 @@
 #include <unordered_set>
 #include "HiddenSniper.h"
 #include "BlockObject.h"
+#include "Bridge.h"
+#include "LAirCraft.h"
+#include "HIddenAirCraft.h"
+#include "NormalExplosion.h"
+#include "ObjectExplosion.h"
 
 using namespace std;
+extern CBill* bill;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -24,6 +30,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	player = NULL;
 	key_handler = new CBillInputHandler();
 	QuadTree = NULL;
+	paused = 0;
 }
 
 #define FULL_WEIGHT_1_1 2816
@@ -158,6 +165,14 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
+	CNormalExplosion::LoadAniamtion();
+	CObjectExplosion::LoadAniamtion();
+	CBill::LoadAnimation();
+
+	CGrass::LoadAnimation();
+	CGunRotation::LoadAnimation();
+	CSoldier::LoadAnimation();
+	CSniper::LoadAnimation();
 	vector<string> tokens = split(line);
 
 	// skip invalid lines - an object set must have at least id, x, y
@@ -179,15 +194,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CBill(x, y);
 		player = (CBill*)obj;
-
+		bill = (CBill*)player;
 		//debugout(l"[info] player object has been created!\n");
 		break;
 	case ID_GRASS: obj = new CGrass(x,y); break;
-	case ID_SOLDIER: obj = new CSoldier(x, y); break;
+	case ID_SODIER: obj = new CSoldier(x, y); break;
 	case ID_BLOCK_OBJECT: obj = new CBlockObject(x, y, atoi(tokens[3].c_str())); break;
 	case ID_SNIPER: obj = new CSniper(x, y); break;
 	case ID_GUNROTATION: obj = new CGunRotation(x, y); break;
 	case ID_SNIPER_HIDDEN: obj = new CHiddenSniper(x, y); break;
+	case ID_LAIRCRAFT: obj = new CLAirCraft(x, y); break;
+	case ID_HIDDENAIRCRAFT: obj = new CHiddenAirCraft(x, y); break;
+	//case ID_BRIDGE: obj = new CBridge(x, y); break;
 
 	default:
 		//debugout(l"[error] invalid object type: %d\n", object_type);
@@ -253,7 +271,7 @@ void CPlayScene::Load()
 
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
-		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; QuadTree = new TreeNode(0, 0, current_map->GetMapWidth(), current_map->GetMapWidth()); continue; };
+		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; QuadTree = new TreeNode(0, CGame::GetInstance()->GetCamY(), current_map->GetMapWidth(), current_map->GetMapWidth()); continue;};
 		if (line == "[TILEMAP]") { section = SCENE_SECTION_TILEMAP_DATA; continue; }
 		if (line == "[HIDDENMAP]") { section = SCENE_SECTION_TILEMAP_HIDDEN; continue; }
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
@@ -287,40 +305,53 @@ void CPlayScene::Update(DWORD dt)
 		if (gameObjectsList != NULL)
 		{
 			for (int i = 0; i < gameObjectsList->size(); i++)
-				coObjects.insert(gameObjectsList->at(i));
+			{
+				if (!IsGameObjectDeleted(gameObjectsList->at(i)))
+				
+					coObjects.insert(gameObjectsList->at(i));
+
+			}
 		}
 	}
 	vector<LPGAMEOBJECT> object;
 	object.insert(object.end(), coObjects.begin(), coObjects.end());
+	object.push_back(player);
 	for (size_t i = 0; i < object.size(); i++)
 	{
-		object.at(i)->Update(dt, &object);
-		QuadTree->Update(object.at(i));
+		if(!object.at(i)->IsDeleted())
+			object.at(i)->Update(dt, &object);
 	}
-	player->Update(dt, &object);
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	//player->Update(dt, &object);
 	if (player == NULL) return;
 
-	// Update camera to follow marioD
 	float cx, cy;
 	player->GetPosition(cx, cy);
 	for (int i = 0; i < ammo->size(); i++)
+	{
 		ammo->at(i)->Update(dt, &object);
+		
+	}
+	object.pop_back();
+	for (size_t i = 0; i < object.size(); i++)
+	{
+		QuadTree->Update(object.at(i));
+	}
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetBackBufferWidth() / 2;
-	cy = 0;
+	cy += game->GetBackBufferHeight() / 2;
+
+	//if (cx < 0) cx = 0;
+	//if (cx + game->GetBackBufferWidth() > current_map->GetMapWidth()) cx = current_map->GetMapWidth() - game->GetBackBufferWidth();
+
+
+	D3DXVECTOR2 cam;
+	game->GetCamPos(cam.x, cam.y);
+	if (cy - game->GetBackBufferHeight() < 0) cy = current_map->GetMapHeight();
+	if (cy > current_map->GetMapHeight()) cy = current_map->GetMapHeight();
+
 	if (cx < 0) cx = 0;
-		if (cx > FULL_WEIGHT_1_1 - ADJUST_CAMERA_X) cx = FULL_WEIGHT_1_1 - ADJUST_CAMERA_X;
-
-
-		if (cy > ADJUST_CAM_MAX_Y) cy = ADJUST_CAM_MAX_Y;
-		else if ((ADJUST_CAM_MIN_Y < cy) && (cy < ADJUST_CAM_MAX_Y)) cy = ADJUST_CAM_MAX_Y;
-		else  cy = ADJUST_CAM_MAX_Y + cy - ADJUST_CAM_MIN_Y;
-		//else if (cy < ADJUST_CAM_MAX_Y) cy =  cy+ ADJUST_CAM_MAX_Y ;
-		if (cy < 0) cy = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
-
 
 	PurgeDeletedObjects();
 }
@@ -343,9 +374,11 @@ void CPlayScene::Render()
 		}
 	}
 	for (auto i = coObjects.begin(); i != coObjects.end(); ++i)
-		(*i)->Render();
+		if(*i != NULL && !((*i)->IsDeleted()))
+			(*i)->Render();
 	for (auto i = ammo->begin(); i != ammo->end(); ++i)
-		(*i)->Render();
+		if (*i != NULL && !((*i)->IsDeleted()))
+			(*i)->Render();
 	player->Render();
 }
 
@@ -395,10 +428,22 @@ void CPlayScene::PurgeDeletedObjects()
 			*it = NULL;
 		}
 	}
-
+	vector<CBullet*>::iterator it2;
+	for (it2 = ammo->begin(); it2 != ammo->end(); it2++)
+	{
+		LPGAMEOBJECT o = *it2;
+		if (o->IsDeleted())
+		{
+			delete o;
+			*it2 = NULL;
+		}
+	}
 	// NOTE: remove_if will swap all deleted items to the end of the vector
 	// then simply trim the vector, this is much more efficient than deleting individual items
 	objects.erase(
 		std::remove_if(objects.begin(), objects.end(), CPlayScene::IsGameObjectDeleted),
 		objects.end());
+	ammo->erase(
+		std::remove_if(ammo->begin(), ammo->end(), CPlayScene::IsGameObjectDeleted),
+		ammo->end());
 }

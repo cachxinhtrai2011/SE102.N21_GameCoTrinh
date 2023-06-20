@@ -3,7 +3,7 @@
 class CRifleBullet: public CBullet
 {
 public:
-	CRifleBullet(float x, float y, float vx = 0.5f, float vy = 0.5f) : CBullet(x, y, vx, vy) {
+	CRifleBullet(float x, float y, float vx = 0.5f, float vy = 0.5f, int enemy = 0) : CBullet(x, y, vx, vy, enemy) {
 		bulletAnimation = CAnimations::GetInstance()->Get(ID_ANI_BULLET_RIFLE);
 		if (bulletAnimation == NULL)
 		{
@@ -11,10 +11,10 @@ public:
 			bulletAnimation = CAnimations::GetInstance()->Get(ID_ANI_BULLET_RIFLE);
 		}
 	}
-
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject = NULL)
+	void OnNoCollision(DWORD dt)
 	{
-		CBullet::Update(dt);
+		x += vx * dt;
+		y += vy * dt;
 	}
 	static void LoadAnimation()
 	{
@@ -30,5 +30,13 @@ public:
 		ani->Add(ID_ANI_BULLET_RIFLE);
 		CAnimations::GetInstance()->Add(ID_ANI_BULLET_RIFLE, ani);
 	}
-};
 
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom)
+	{
+		left = x;
+		top = y;
+		right = x + 2; 
+		bottom = y - 2;
+	}
+	int GetDamage() { return 2; }
+};

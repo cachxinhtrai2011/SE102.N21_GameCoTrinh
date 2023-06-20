@@ -1,7 +1,7 @@
 #pragma once
 #include "Bullet.h"
 
-#define RADIUS 25.0f
+#define RADIUS 15.0f
 #define PI 3.141517f
 class CCurcularBullet: public CBullet
 {
@@ -12,7 +12,7 @@ private:
 	float deg;
 	float vdeg;
 public:
-	CCurcularBullet(float x, float y, float vx = 0.5f, float vy = 0.0f) : CBullet(x, y, vx, vy)
+	CCurcularBullet(float x, float y, float vx = 0.5f, float vy = 0.0f, int enemy = 0) : CBullet(x, y, vx, vy, enemy)
 	{
 		float vector_abs = sqrt(vx * vx + vy * vy);
 		Ix = x + (RADIUS / vector_abs) * vx;
@@ -34,7 +34,7 @@ public:
 		}
 		bulletAnimation = ani;
 	}
-	void Update(DWORD dt,vector<LPGAMEOBJECT> *gameObject = NULL)
+	void OnNoCollision(DWORD dt)
 	{
 		Ix = Ix + vx * dt;
 		Iy = Iy + vy * dt;
@@ -59,6 +59,13 @@ public:
 		LPANIMATION ani = new CAnimation(100);
 		ani->Add(ID_ANI_BULLET_F);
 		CAnimations::GetInstance()->Add(ID_ANI_BULLET_F, ani);
+	}
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom)
+	{
+		left = Ix - radius;
+		top = Iy + radius;
+		right = Ix + radius;
+		bottom = Iy - radius;
 	}
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "AirCraft.h"
-#define ID_ANI_LARICRAFT 1100
+#include "FireGun.h"
 class CLAirCraft: public CAirCraft
 {
 public:
@@ -27,6 +27,10 @@ public:
 		LPANIMATION ani = new CAnimation(100);
 		ani->Add(ID_ANI_LARICRAFT);
 		CAnimations::GetInstance()->Add(ID_ANI_LARICRAFT, ani);
+	}
+	void PowerUp(CBill* bill)
+	{
+		bill->SetGun(new CFireGun());
 	}
 };
 

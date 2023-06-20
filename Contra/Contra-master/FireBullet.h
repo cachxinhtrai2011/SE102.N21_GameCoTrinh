@@ -6,9 +6,9 @@ private:
 	float rotation;
 public:
 	static CFireBullet* __instance;
-	CFireBullet(float x, float y, float vx = 0.5f, float vy = 0.5f) :CBullet(x, y, vx, vy) 
+	CFireBullet(float x, float y, float vx = 0.5f, float vy = 0.5f, int enemy = 0):CBullet(x, y, vx, vy, enemy) 
 	{
-		rotation = -atan(vy / vx);
+		rotation = atan(vy / vx);
 		bulletAnimation = CAnimations::GetInstance()->Get(ID_ANI_BULLET_L);
 		if (bulletAnimation == NULL)
 		{
@@ -16,13 +16,10 @@ public:
 			bulletAnimation = CAnimations::GetInstance()->Get(ID_ANI_BULLET_L);
 		}
 	};
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject = NULL)
+	void OnNoCollision(DWORD dt)
 	{
-		CBullet::Update(dt, gameObject);
-		if (dt > 0)
-			dt = -(float)(dt / 2);
-		else
-			dt = -(float)(dt * 2);
+		x += vx * dt;
+		y += vy * dt;
 	}
 	void Render()
 	{
@@ -30,7 +27,7 @@ public:
 		{
 			bulletAnimation->Render(x, y, rotation);
 			bulletAnimation->Render(x + vx * 10, y + vy * 10, rotation);
-			bulletAnimation->Render(x + vx * 30, y + vy * 30, rotation);
+			bulletAnimation->Render(x + vx * 20, y + vy * 20, rotation);
 		}
 	}
 
@@ -53,17 +50,36 @@ public:
 		if (__instance == NULL)
 		{
 			__instance = new CFireBullet(x, y, vx, vy);
-			CGame::GetInstance()->gameObjects.push_back(__instance);
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(__instance);
+			
 		}
 		else
 		{
-			__instance->x = x;
-			__instance->y = y;
-			__instance->vx = vx;
-			__instance->vy = vy;
-			__instance->rotation = -atan(vy / vx);
+			vector<CBullet*>* ammo = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo();
+			vector<CBullet*>::iterator i = std::find(ammo->begin(), ammo->end(), __instance);
+			if (i == ammo->end())
+			{
+				__instance = new CFireBullet(x, y, vx, vy);
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(__instance);
+			}
+			else
+			{
+				__instance->x = x;
+				__instance->y = y;
+				__instance->vx = vx;
+				__instance->vy = vy;
+				__instance->rotation = atan(vy / vx);
+			}
 		}
 		return __instance;
+	}
+
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom)
+	{
+		left = x;
+		top = y;
+		right = x + 30;
+		bottom = y - 5;
 	}
 };
 

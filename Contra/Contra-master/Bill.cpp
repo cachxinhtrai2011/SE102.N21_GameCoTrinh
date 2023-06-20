@@ -4,11 +4,20 @@
 #include "Game.h"
 #include "BillBullet.h"
 #include "Soldier.h"
-#include "Portal.h"
+#define DIE_TIMEOUT 2000
+#define DEAD_BARRIER_TIME 2000
 void CBill::Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject)
 {
 	if (isShotting)
 		gun->Shoot();
+	if (state == BILL_STATE_DEAD && GetTickCount64() - dieStart > DIE_TIMEOUT)
+	{
+		y = 300.0f;
+		SetState(BILL_STATE_IDLE);
+		invincibleDuration = DEAD_BARRIER_TIME;
+	}
+	if(invincibleDuration > 0)
+		invincibleDuration -= dt;
 	CCollision::GetInstance()->Process(this, dt, gameObject);
 }
 
@@ -97,11 +106,16 @@ void CBill::Render()
 			aniID = ID_ANI_BILL_LAYDOWN_LEFT;
 
 	animations->Get(aniID)->Render(x, y);
-	RenderBoundingBox();
+	D3DXVECTOR2 cam;
+	CGame::GetInstance()->GetCamPos(cam.x, cam.y);
+	for (int i = 0; i < life->size(); i++)
+		life->at(i)->Render(cam.x + i * 11.0f + 3.0f, cam.y - 10.0f);
 }
 
 void CBill::SetState(int state)
 {
+	if (this->state == BILL_STATE_DEAD && GetTickCount64() - dieStart < DIE_TIMEOUT)
+		return;
 	switch (state)
 	{
 		case BILL_STATE_IDLE:
@@ -142,7 +156,15 @@ void CBill::SetState(int state)
 			}
 			break;
 		case BILL_STATE_DEAD:
+			isShotting = 0;
+			dieStart = GetTickCount64();
 			vx = -BILL_RUN_SPEED;
+			if (life->size() == 0)
+			{
+				CGame::GetInstance()->InitiateSwitchScene(99);
+			}
+			else
+				life->pop_back();
 			vy = BILL_JUMP_SPEED_Y;
 		default:
 			vx = 0;
@@ -400,11 +422,11 @@ void CBill::LoadAnimation()
 	sprite->Add(ID_ANI_BILL_DEAD + 1, 19, 112, 42, 131, tex->Get(TEXTURE_RIGHT_ID));
 	sprite->Add(ID_ANI_BILL_DEAD + 2, 43, 107, 59, 131, tex->Get(TEXTURE_RIGHT_ID));
 	sprite->Add(ID_ANI_BILL_DEAD + 3, 60, 120, 93, 131, tex->Get(TEXTURE_RIGHT_ID));
-	ani = new CAnimation(1000);
+	ani = new CAnimation(100);
 	ani->Add(ID_ANI_BILL_DEAD);
 	ani->Add(ID_ANI_BILL_DEAD + 1);
 	ani->Add(ID_ANI_BILL_DEAD + 2);
-	ani->Add(ID_ANI_BILL_DEAD + 3);
+	ani->Add(ID_ANI_BILL_DEAD + 3, DIE_TIMEOUT - 300);
 	animation->Add(ID_ANI_BILL_DEAD, ani);
 }
 
@@ -413,38 +435,23 @@ void CBill::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
-		if (state == BILL_STATE_JUMP || state == BILL_STATE_DEAD)
+		if (state == BILL_STATE_JUMP)
 			SetState(BILL_STATE_IDLE);
 		
 	}
-	if (e->nx != 0 && e->obj->IsBlocking())
-		vx = 0;
+	//if (e->ny < 0 && e->obj->IsBlocking())
+	//{
+	//	SetPosition(x, y + 50.0f);
+	//	if (state == BILL_STATE_JUMP)
+	//		SetState(BILL_STATE_IDLE);
 
-	if (dynamic_cast<CSoldier*>(e->obj))
-		OnCollisionWithSoldier(e);
-	if (dynamic_cast<CPortal*>(e->obj))
-		OnCollisionWithPortal(e);
-}
-
-void CBill::OnCollisionWithPortal(LPCOLLISIONEVENT e)
-{
-	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
-}
-
-
-void CBill::OnCollisionWithSoldier(LPCOLLISIONEVENT e)
-{
-	CSoldier* soldier = dynamic_cast<CSoldier*>(e->obj);
-
-	if (e->nx < 0)
+	//}
+	if (dynamic_cast<CSoldier*>(e->obj) && state != BILL_STATE_DEAD && invincibleDuration <= 0)
 	{
-		if (soldier->GetState() != SOLDIER_STATE_DEATH)
-		{
-			soldier->SetState(SOLDIER_STATE_DEATH);
-		}
+		SetState(BILL_STATE_DEAD);
 	}
 }
+
 void CBill::OnNoCollision(DWORD dt)
 {
 	x += dt * vx;
@@ -467,21 +474,27 @@ void CBill::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	if (state == BILL_STATE_IDLE)
 	{
 		right = x + 24;
-		bottom = y - 25;
+		bottom = y - 36;
 		return;
 	}
 	if (state == BILL_STATE_LAYDOWN)
 	{
 		right = x + 33;
-		bottom = y - 17;
+		bottom = y - 20;
 		return;
 	}
 	if (state == BILL_STATE_SWIM || state == BILL_STATE_SWIM_MOVE)
 	{
 		right = x + 17;
-		bottom = y - 17;
+		bottom = top - 25;
 		return;
 	}
-	right = x + 21;
-	bottom = y - 25;
+	if (state == BILL_STATE_DEAD)
+	{
+		right = x + 21;
+		bottom = y - 12;
+		return;
+	}
+	right = x + 24;
+	bottom = y - 36;
 }

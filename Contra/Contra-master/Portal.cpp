@@ -28,8 +28,6 @@ void CPortal::RenderBoundingBox()
 
 	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
-
-	CGame::GetInstance()->DrawBBox(x - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
 void CPortal::Render()

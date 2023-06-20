@@ -49,16 +49,18 @@ class CGame
 
 	HINSTANCE hInstance;
 	unordered_map<int, LPSCENE> scenes;
-	int current_scene;
-	int next_scene = -1;
+	int current_scene = -1;
+	int next_scene = 0;
 
 public:
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void _ParseSection_FONTS(string line);
 	void Load(LPCWSTR gameFile);
 	void LoadDemo();
-	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
+	void SwitchScene();
+	int GetCurrentSceneID() { return current_scene; }
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -78,72 +80,7 @@ public:
 	//        if NOT NULL, only draw that portion of the texture 
 	void Draw(float x, float y, LPTEXTURE tex, RECT* rect = NULL);
 
-	void DrawBBox(float x, float y, LPTEXTURE tex, RECT* rect, float alpha, int sprite_width, int sprite_height)
-	{
-		if (tex == NULL) return;
-
-		int spriteWidth = sprite_width;
-		int spriteHeight = sprite_height;
-
-		D3DX10_SPRITE sprite;
-
-		// Set the sprite’s shader resource view
-		sprite.pTexture = tex->getShaderResourceView();
-
-		if (rect == NULL)
-		{
-			// top-left location in U,V coords
-			sprite.TexCoord.x = 0;
-			sprite.TexCoord.y = 0;
-
-			// Determine the texture size in U,V coords
-			sprite.TexSize.x = 1.0f;
-			sprite.TexSize.y = 1.0f;
-
-			if (spriteWidth == 0) spriteWidth = tex->getWidth();
-			if (spriteHeight == 0) spriteHeight = tex->getHeight();
-		}
-		else
-		{
-			sprite.TexCoord.x = rect->left / (float)tex->getWidth();
-			sprite.TexCoord.y = rect->top / (float)tex->getHeight();
-
-			if (spriteWidth == 0) spriteWidth = (rect->right - rect->left + 1);
-			if (spriteHeight == 0) spriteHeight = (rect->bottom - rect->top + 1);
-
-			sprite.TexSize.x = spriteWidth / (float)tex->getWidth();
-			sprite.TexSize.y = spriteHeight / (float)tex->getHeight();
-		}
-
-		// Set the texture index. Single textures will use 0
-		sprite.TextureIndex = 0;
-
-		// The color to apply to this sprite, full color applies white.
-		//sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-		sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
-
-
-		//
-		// Build the rendering matrix based on sprite location 
-		//
-
-		// The translation matrix to be created
-		D3DXMATRIX matTranslation;
-
-		// Create the translation matrix
-		D3DXMatrixTranslation(&matTranslation, x, (backBufferHeight - y), 0.1f);
-
-		// Scale the sprite to its correct width and height because by default, DirectX draws it with width = height = 1.0f 
-		D3DXMATRIX matScaling;
-		D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
-
-		// Setting the sprite’s position and size
-		sprite.matWorld = (matScaling * matTranslation);
-
-		spriteObject->DrawSpritesImmediate(&sprite, 1, 0, 0);
-	}
-
-	void DrawT(float x, float y, LPTEXTURE tex, int l, int t, int r, int b)
+	void Draw(float x, float y, LPTEXTURE tex, int l, int t, int r, int b)
 	{
 		RECT rect;
 		rect.left = l;
@@ -184,6 +121,6 @@ public:
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
-
+	bool IsSceneChange() { return (current_scene != next_scene); }
 	~CGame();
 };

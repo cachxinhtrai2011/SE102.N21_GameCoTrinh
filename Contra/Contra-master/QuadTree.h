@@ -38,7 +38,7 @@ public:
 		left = x;
 		down = y;
 		right = x + width;
-		top = y + height;
+		top = y - height;
 	}
 	vector<LPTREENODE>* NodeInCam();
 	vector<LPGAMEOBJECT>* GetObject() {
