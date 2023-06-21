@@ -1,10 +1,10 @@
 #include "GameOverScene.h"
-#include "GameOverInputHandler.h"
+#include "GameInputHandler.h"
 CGameOverScene::CGameOverScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
 	background = NULL;
 	cursor = NULL;
-	key_handler = new CGameOverInputHandler(this);
+	key_handler = new CGameInputHandler(this);
 }
 void CGameOverScene::Load()
 {

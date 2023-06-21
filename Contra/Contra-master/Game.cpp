@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "Game.h"
 #include <fstream>
+#include "StartScene.h"
 #include "IntroScene.h"
 #include "GameOverScene.h"
 #define CLASS_NAME L"CONTRA"
@@ -135,13 +136,11 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 	scenes[99] = new CGameOverScene(99,L"");
+	scenes[00] = new CStartScene(00, L"");
 	SwitchScene();
 
 }
 
-void CGame::LoadDemo()
-{
-}
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;
@@ -152,7 +151,7 @@ void CGame::SwitchScene()
 	if (next_scene < 0 || next_scene == current_scene) return;
 
 	DebugOut(L"[INFO] Switching to scene %d %d\n", current_scene, next_scene);
-	if (current_scene > 0)
+	if (current_scene > 1)
 		scenes[current_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();

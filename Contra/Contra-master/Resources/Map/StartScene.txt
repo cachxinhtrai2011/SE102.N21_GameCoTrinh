@@ -1,0 +1,5 @@
+[BACKGROUND]
+Resources\Images\intro.png
+[TEXT]
+Start 1	90	160
+Start 2	90	140

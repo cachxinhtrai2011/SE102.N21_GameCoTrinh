@@ -456,7 +456,7 @@ void CBill::OnNoCollision(DWORD dt)
 {
 	x += dt * vx;
 	y += dt * vy;
-	vy += Bill_GRAVITY * dt;
+	vy += /*Bill_GRAVITY * dt*/0;
 	if (y > GROUND_Y)
 	{
 		vy = 0;

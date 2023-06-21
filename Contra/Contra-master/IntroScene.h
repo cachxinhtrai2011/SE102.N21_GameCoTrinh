@@ -3,7 +3,7 @@
 #include "Text.h"
 #include <string>
 #include <string.h>
-#define INTRO_DURATION 40000
+#define INTRO_DURATION 2000
 class CIntroScene: public CScene
 {
 protected:

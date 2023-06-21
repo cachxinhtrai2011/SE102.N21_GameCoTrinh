@@ -57,7 +57,6 @@ public:
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void _ParseSection_FONTS(string line);
 	void Load(LPCWSTR gameFile);
-	void LoadDemo();
 	void InitiateSwitchScene(int scene_id);
 	void SwitchScene();
 	int GetCurrentSceneID() { return current_scene; }

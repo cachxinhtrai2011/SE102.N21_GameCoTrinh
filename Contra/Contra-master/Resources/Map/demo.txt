@@ -6,9 +6,10 @@ start	0
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
-0	.\Resources\Map\Intro1.txt	3
-1	.\Resources\Map\stage1.txt	1
-2	.\Resources\Map\stage3.txt	1
+#0	.\Resources\Map\StartScene.txt	3
+1	.\Resources\Map\Intro1.txt	3
+2	.\Resources\Map\stage1.txt	1
+3	.\Resources\Map\stage3.txt	1
 
 # id	file 
 [TEXTURES]
