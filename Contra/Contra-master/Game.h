@@ -8,7 +8,7 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "Scene.h"
-#include "PlayScreen.h"
+#include "PlayScene.h"
 #define SCREEN_WIDTH 272
 #define SCREEN_HEIGHT 256
 #define MAX_FRAME_RATE 120

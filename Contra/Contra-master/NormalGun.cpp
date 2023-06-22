@@ -2,7 +2,7 @@
 #include "Bill.h"
 #include "BillBullet.h"
 #include "FireBullet.h"
-#include "PlayScreen.h"
+#include "PlayScene.h"
 extern CBill* bill;
 void CNormalGun::Shoot()
 {

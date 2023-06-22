@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "PlayScreen.h"
+#include "PlayScene.h"
 #include "Game.h"
 #include "Bullet.h"
 #include "Utils.h"
@@ -197,7 +197,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		bill = (CBill*)player;
 		//debugout(l"[info] player object has been created!\n");
 		break;
-	case ID_SODIER: obj = new CSoldier(x, y); break;
+	case ID_SOLDIER: obj = new CSoldier(x, y); break;
 	case ID_BLOCK_OBJECT: obj = new CBlockObject(x, y, atoi(tokens[3].c_str())); break;
 	case ID_SNIPER: obj = new CSniper(x, y); break;
 	case ID_GUNROTATION: obj = new CGunRotation(x, y); break;
