@@ -43,6 +43,16 @@ void CSniper::Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject)
 	}
 }
 
+void CSniper::SetState(int state) {
+	if (state == SNIPER_STATE_DIE)
+	{
+		dieStart = GetTickCount64();
+		vx = 0.02;
+		vy = 0.25;
+	}
+	CGameObject::SetState(state);
+}
+
 void CSniper::Render()
 {
 	int aniID = -1;

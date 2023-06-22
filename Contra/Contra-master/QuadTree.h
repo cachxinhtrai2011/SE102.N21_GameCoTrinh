@@ -58,4 +58,6 @@ public:
 		else
 			return gameObjects;
 	}
+	bool IsIntersac(LPGAMEOBJECT object, LPTREENODE node);
+	bool IsIntersac(float left, float top, float right, float bottom, LPTREENODE node);
 };

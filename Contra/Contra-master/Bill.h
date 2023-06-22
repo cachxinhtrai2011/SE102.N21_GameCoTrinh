@@ -20,19 +20,7 @@ public:
 	int shotDirection;
 	int faceDirection;
 	CBillInputHandler* handler;
-	CBill(float x, float y): CGameObject(x,y)
-	{
-		isSitting = false;
-		isShotting = false;
-		shotDirection = 0;
-		faceDirection = 1;
-		state = BILL_STATE_IDLE;
-		this->handler = new CBillInputHandler();
-		gun = new CNormalGun();
-		life = new vector<CLife*>();
-		life->push_back(new CLife());
-		life->push_back(new CLife());
-	}
+	CBill(float x, float y);
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject = NULL);
 	void Render();
 	int IsEnemy() { return 0; }

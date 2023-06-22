@@ -9,7 +9,7 @@
 #include "BillInputHandler.h"
 #include "Soldier.h"
 #include "Bill.h"
-#include "Grass.h"
+
 #include "GunRotation.h"
 #include "Sniper.h"
 #include <unordered_set>
@@ -170,7 +170,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CObjectExplosion::LoadAniamtion();
 	CBill::LoadAnimation();
 
-	CGrass::LoadAnimation();
 	CGunRotation::LoadAnimation();
 	CSoldier::LoadAnimation();
 	CSniper::LoadAnimation();
@@ -198,7 +197,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		bill = (CBill*)player;
 		//debugout(l"[info] player object has been created!\n");
 		break;
-	case ID_GRASS: obj = new CGrass(x,y); break;
 	case ID_SODIER: obj = new CSoldier(x, y); break;
 	case ID_BLOCK_OBJECT: obj = new CBlockObject(x, y, atoi(tokens[3].c_str())); break;
 	case ID_SNIPER: obj = new CSniper(x, y); break;

@@ -12,15 +12,7 @@ public:
 	void Render();
 	static void LoadAnimation();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	void SetState(int state) {
-		if (state == SODIER_STATE_DEATH)
-		{
-			dieStart = GetTickCount64();
-			vx = 0.02;
-			vy = 0.25;
-		}
-		CGameObject::SetState(state);
-	}
+	void SetState(int state);
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return 1; }
 	// When no collision has been detected (triggered by CCollision::Process)

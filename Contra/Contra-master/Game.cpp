@@ -135,11 +135,12 @@ void CGame::Load(LPCWSTR gameFile)
 	f.close();
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
-	scenes[99] = new CGameOverScene(99,L"");
+	scenes[99] = new CGameOverScene(99, L"");
 	scenes[00] = new CStartScene(00, L"");
 	SwitchScene();
 
 }
+
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
@@ -160,7 +161,7 @@ void CGame::SwitchScene()
 	cam_y = GetScreenHeight();
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
-	
+
 	s->Load();
 }
 

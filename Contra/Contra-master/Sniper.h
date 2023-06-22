@@ -12,15 +12,7 @@ public:
 	CSniper(float x, float y) : CGameObject(x, y) { state = SNIPER_STATE_NORMAl; lastShot = -1; }
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject);
 	void Render();
-	void SetState(int state) {
-		if (state == SNIPER_STATE_DIE)
-		{
-			dieStart = GetTickCount64();
-			vx = 0.02;
-			vy = 0.25;
-		}
-		CGameObject::SetState(state);
-	}
+	void SetState(int state);
 	static void LoadAnimation();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int IsCollidable() { return 1; }

@@ -7,6 +7,19 @@
 #include "debug.h"
 #define DIE_TIMEOUT 2000
 #define DEAD_BARRIER_TIME 2000
+CBill::CBill(float x, float y) : CGameObject(x, y)
+{
+	isSitting = false;
+	isShotting = false;
+	shotDirection = 0;
+	faceDirection = 1;
+	state = BILL_STATE_IDLE;
+	this->handler = new CBillInputHandler();
+	gun = new CNormalGun();
+	life = new vector<CLife*>();
+	life->push_back(new CLife());
+	life->push_back(new CLife());
+}
 void CBill::Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject)
 {
 	if (isShotting)
