@@ -2,6 +2,6 @@
 Resources\Map\stage3_tilemap.txt
 [OBJECTS]
 #BILL
-1	10	100
+1	20	120
 #BLOCK OBJECT
-9998	0	9	16
+9998	0	40	16

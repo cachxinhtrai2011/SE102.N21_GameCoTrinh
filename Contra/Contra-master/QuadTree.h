@@ -33,12 +33,12 @@ public:
 	void AddObjectToNode(LPGAMEOBJECT object);
 	void Update(LPGAMEOBJECT object);
 	vector<LPTREENODE>* IsObjectInside(LPGAMEOBJECT object);
-	void GetBoundingBox(float& left, float& top, float& right, float& down)
+	void GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	{
 		left = x;
-		down = y;
+		top = y;
 		right = x + width;
-		top = y - height;
+		bottom = y - height;
 	}
 	vector<LPTREENODE>* NodeInCam();
 	vector<LPGAMEOBJECT>* GetObject() {

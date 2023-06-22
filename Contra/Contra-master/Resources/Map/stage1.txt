@@ -22,7 +22,7 @@ Resources\Map\stage1_tilemap.txt
 3	320	200
 
 #SNIPER
-7	300	50
+7	300	100
 7	1250	145
 
 #HIDDENSNIPER

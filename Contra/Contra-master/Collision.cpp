@@ -1,6 +1,8 @@
 #include "Collision.h"
 #include "GameObject.h"
 #include "Bullet.h"
+#include "Bill.h"
+#include "BlockObject.h"
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
@@ -196,6 +198,11 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		LPCOLLISIONEVENT c = coEvents[i];
 		if (c->isDeleted) continue;
 		if (c->obj->IsDeleted()) continue; 
+
+		if (( dynamic_cast<CBlockObject*>(c->obj)) &&   (c->ny < 0 || c->nx < 0 || c->nx > 0) )
+		{
+			continue;
+		}
 
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
 		if (filterBlock == 1 && !c->obj->IsBlocking()) 

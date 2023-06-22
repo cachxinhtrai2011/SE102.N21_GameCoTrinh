@@ -1,9 +1,10 @@
-
+#include "BlockObject.h"
 #include "Bill.h"
 #include "Textures.h"
 #include "Game.h"
 #include "BillBullet.h"
 #include "Soldier.h"
+#include "debug.h"
 #define DIE_TIMEOUT 2000
 #define DEAD_BARRIER_TIME 2000
 void CBill::Update(DWORD dt, vector<LPGAMEOBJECT> *gameObject)
@@ -432,38 +433,56 @@ void CBill::LoadAnimation()
 
 void CBill::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
+	if (dynamic_cast<CBlockObject*>(e->obj)) 
 	{
-		vy = 0;
-		if (state == BILL_STATE_JUMP)
-			SetState(BILL_STATE_IDLE);
-		
-	}
-	//if (e->ny < 0 && e->obj->IsBlocking())
-	//{
-	//	SetPosition(x, y + 50.0f);
-	//	if (state == BILL_STATE_JUMP)
-	//		SetState(BILL_STATE_IDLE);
+		if (e->ny > 0 )
+		{
+			vy = 0;
+			setIsOnGround(1);
+			if (state == BILL_STATE_JUMP)
+				SetState(BILL_STATE_IDLE);
 
-	//}
+		}
+		else if (e->ny < 0)
+		{
+			setIsOnGround(0);
+		}
+	}
+	else 
+	{
+		if (e->ny > 0 && e->obj->IsBlocking())
+		{
+			vy = 0;
+			if (state == BILL_STATE_JUMP)
+				SetState(BILL_STATE_IDLE);
+
+		}
+		if (e->ny <= 0 && e->obj->IsBlocking())
+		{
+			vy = 0;			
+		}
+
+	}
 	if (dynamic_cast<CSoldier*>(e->obj) && state != BILL_STATE_DEAD && invincibleDuration <= 0)
 	{
 		SetState(BILL_STATE_DEAD);
 	}
+	
 }
 
 void CBill::OnNoCollision(DWORD dt)
 {
+	setIsOnGround(0);
 	x += dt * vx;
 	y += dt * vy;
-	vy += /*Bill_GRAVITY * dt*/0;
-	if (y > GROUND_Y)
-	{
-		vy = 0;
-		y = GROUND_Y;
-		if (state == BILL_STATE_JUMP) CGame::GetInstance()->ProcessKeyboard();
-		if (state == BILL_STATE_JUMP) SetState(BILL_STATE_IDLE);
-	}
+	vy += Bill_GRAVITY * dt / 2;
+	//if (y > GROUND_Y)
+	//{
+	//	vy = 0;
+	//	y = GROUND_Y;
+	//	if (state == BILL_STATE_JUMP) CGame::GetInstance()->ProcessKeyboard();
+	//	if (state == BILL_STATE_JUMP) SetState(BILL_STATE_IDLE);
+	//}
 
 }
 
@@ -480,7 +499,7 @@ void CBill::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	if (state == BILL_STATE_LAYDOWN)
 	{
 		right = x + 33;
-		bottom = y - 20;
+		bottom = y - 18;
 		return;
 	}
 	if (state == BILL_STATE_SWIM || state == BILL_STATE_SWIM_MOVE)

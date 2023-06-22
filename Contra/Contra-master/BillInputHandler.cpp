@@ -71,17 +71,28 @@ void CBillInputHandler::onKeyClick(int keyCode)
 				bill->SetState(BILL_STATE_RUN);
 		return;
 	}
-	if (keyCode == DIK_S && bill->GetState() != BILL_STATE_JUMP)
+	if (keyCode == DIK_S && bill->GetState() == BILL_STATE_LAYDOWN)
 	{
+		bill->setIsOnGround(0);
+		bill->SetPosition(bill->GetX(), bill->GetY() - 1.0f);
+		CAnimations::GetInstance()->Get(ID_ANI_BILL_IDLE_LEFT)->SetStartAnimation(CAnimations::GetInstance()->Get(ID_ANI_BILL_SWIMMING_START));
+		bill->SetState(BILL_STATE_IDLE);
+		return;
+	}
+
+	if (keyCode == DIK_S && bill->GetState() != BILL_STATE_JUMP && bill->IsOnGround() == 1)
+	{
+		bill->setIsOnGround(0);
 		bill->SetState(BILL_STATE_JUMP);
 		return;
 	}
+
 	if (keyCode == DIK_0)
 	{
 		bill->SetGun(new CNormalGun());
 		return;
 	}
-	/*if (keyCode == DIK_1)
+	if (keyCode == DIK_1)
 	{
 		bill->SetGun(new CCircularGun());
 		return;
@@ -90,17 +101,17 @@ void CBillInputHandler::onKeyClick(int keyCode)
 	{
 		bill->SetGun(new CSpreadGun());
 		return;
-	}*/
-	/*if (keyCode == DIK_3)
+	}
+	if (keyCode == DIK_3)
 	{
 		bill->SetGun(new CFireGun());
 		return;
-	}*/
-	/*if (keyCode == DIK_5)
+	}
+	if (keyCode == DIK_5)
 	{
 		bill->SetGun(new CRifleGun());
 		return;
-	}*/
+	}
 	if (keyCode == DIK_A)
 	{
 		bill->isShotting = true;
@@ -125,7 +136,6 @@ void CBillInputHandler::onKeyPress(int keyCode)
 			CAnimations::GetInstance()->Get(ID_ANI_BILL_SWIMMING_LEFT)->SetStartAnimation(CAnimations::GetInstance()->Get(ID_ANI_BILL_SWIMMING_START));
 		bill->SetState(BILL_STATE_SWIM);
 		return;
-
 	}
 	if (keyCode == DIK_Z)
 		bill->SetState(BILL_STATE_LAYDOWN);

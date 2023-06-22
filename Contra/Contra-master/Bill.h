@@ -13,6 +13,8 @@ private:
 	int invincibleDuration;
 	vector<CLife*>* life;
 public:
+	int isOnGround;
+	int isBlocking;
 	BOOLEAN isSitting;
 	BOOLEAN isShotting;
 	int shotDirection;
@@ -44,5 +46,8 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int IsCollidable() { return 1; }
 	int IsBlocking() { return 1; }
+	int IsOnGround() { return isOnGround; }
+	void setIsOnGround(int value) { isOnGround = value; }
+	void setIsBlocking(int value) { isBlocking = value; }
 	void GetHit(int damage) { SetState(BILL_STATE_DEAD); }
 };

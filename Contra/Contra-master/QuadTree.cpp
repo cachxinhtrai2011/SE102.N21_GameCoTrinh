@@ -54,8 +54,7 @@ vector<LPTREENODE>* TreeNode::NodeInCam()
 	float left, top;
 	CGame::GetInstance()->GetCamPos(left, top);
 	float right = left + CGame::GetInstance()->GetScreenWidth();
-	float bottom = top - CGame::GetInstance()->GetScreenHeight();;
-	top = top + CGame::GetInstance()->GetScreenHeight();
+	float bottom = top - CGame::GetInstance()->GetScreenHeight();
 	if (!IsIntersac(left, top, right, bottom, this))
 		return new vector<LPTREENODE>();
 	if(child != NULL)

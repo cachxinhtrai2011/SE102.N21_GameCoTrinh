@@ -13,7 +13,7 @@
 #include <vector>
 #define TEXTURE_PATH L"./Resources/Images/bill_animation.png"
 #define BACKGROUND_COLOR D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f)
-#define SCREEN_WIDTH 255
+#define SCREEN_WIDTH 291
 #define SCREEN_HEIGHT 255
 
 CTextures* tex;

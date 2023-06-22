@@ -7,15 +7,31 @@ void CGameInputHandler::onKeyClick(int keyCode)
 void CGameInputHandler::onKeyPress(int keyCode)
 {
 	//Game Over
-	if (keyCode == DIK_UPARROW)
-		OverScene->SetCusorPos(75.0f, 110.0f);
-	if (keyCode == DIK_DOWNARROW)
-		OverScene->SetCusorPos(75.0f, 95.0f);
+	if (keyCode == DIK_UPARROW) {
+		if (CGame::GetInstance()->GetCurrentSceneID() == 00)
+		{
+			StartScene->SetCusorPos(11.0f, 110.0f);
+		}
+		else {
+			OverScene->SetCusorPos(75.0f, 110.0f);
+		}
+	}	
+		if (keyCode == DIK_DOWNARROW)
+		{
+			if (CGame::GetInstance()->GetCurrentSceneID() == 00)
+			{
+				StartScene->SetCusorPos(11.0f, 95.0f);
+			}
+			else {
+				OverScene->SetCusorPos(75.0f, 95.0f);
+			}
+		}
+		
 	if (keyCode == DIK_RETURN)
 	{
 		if (CGame::GetInstance()->GetCurrentSceneID() == 00)
 		{
-			CGame::GetInstance()->InitiateSwitchScene(CGame::GetInstance()->GetCurrentSceneID() + 1);
+			CGame::GetInstance()->InitiateSwitchScene(1);
 		}
 		else {
 			D3DXVECTOR2 cursorPos;

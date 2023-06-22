@@ -1,7 +1,9 @@
 #include "Sniper.h"
 #include "Bill.h"
 #include "RifleBullet.h"
+#include "NormalExplosion.h"
 
+#define DIETIMEOUT 300
 #define RECOIL_TIME 3000
 
 extern CBill* bill;
@@ -11,20 +13,34 @@ void CSniper::Update(DWORD dt, vector<LPGAMEOBJECT>* gameObject)
 		faceDirection = -1;
 	else
 		faceDirection = 1;
-	if (state == SNIPER_STATE_SHOT && GetTickCount64() -lastShot >= RECOIL_TIME )
+	if (state == SNIPER_STATE_DIE)
 	{
-		lastShot = GetTickCount64();
-		if (bill->GetY() - y >= -100)
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35f, 0.01f, 1));
-		else if (bill->GetY() - y <= 100)
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35, -0.35f, 1));
+		if (GetTickCount64() - dieStart >= DIETIMEOUT)
+		{
+			Deleted = 1;
+			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->AddObjectToQuadTree(new CNormalExplosion(x, y));
+		}
 		else
-			((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.35, 0.0f, 1));
+			OnNoCollision(dt);
 	}
-	if (abs(bill->GetX() - x) <= 100)
-		SetState(SNIPER_STATE_SHOT);
-	else if(state != SNIPER_STATE_NORMAl)
-		SetState(SNIPER_STATE_NORMAl);
+	else
+	{
+		if (state == SNIPER_STATE_SHOT && GetTickCount64() - lastShot >= RECOIL_TIME)
+		{
+			lastShot = GetTickCount64();
+			if (bill->GetY() - y >= -100)
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.1f, 0.01f, 1));
+			else if (bill->GetY() - y <= 100)
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.1f, -0.1f, 1));
+			else
+				((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetAmmo()->push_back(new CRifleBullet(x, y, faceDirection * 0.1f, 0.0f, 1));
+		}
+		if (abs(bill->GetX() - x) <= 100)
+			SetState(SNIPER_STATE_SHOT);
+		else if (state != SNIPER_STATE_NORMAl)
+			SetState(SNIPER_STATE_NORMAl);
+		CCollision::GetInstance()->Process(this, dt, gameObject);
+	}
 }
 
 void CSniper::Render()
@@ -40,9 +56,10 @@ void CSniper::Render()
 			else if (bill->GetY() - y <= 100)
 				aniID = ID_ANI_SNIPER_SHOT_DOWN;
 			else aniID = ID_ANI_SNIPER_SHOT;
+		else if (state == SNIPER_STATE_DIE)
+			aniID = ID_ANI_SNIPER_SHOT;
 	}
-	else
-	{
+	else	{
 
 		if (state == SNIPER_STATE_NORMAl)
 			aniID = ID_ANI_SNIPER_NORMAL_RIGHT;
@@ -52,6 +69,8 @@ void CSniper::Render()
 			else if (bill->GetY() - y <= 100)
 				aniID = ID_ANI_SNIPER_SHOT_DOWN_RIGHT;
 			else aniID = ID_ANI_SNIPER_SHOT_RIGHT;
+		else if (state == SNIPER_STATE_DIE)
+			aniID = ID_ANI_SNIPER_SHOT;
 	}
 	if(aniID  == -1)
 		aniID = ID_ANI_SNIPER_NORMAL;
@@ -156,8 +175,17 @@ void CSniper::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CSniper::OnNoCollision(DWORD dt)
 {
+	x += -faceDirection * dt * vx;
+
+	vy += Bill_GRAVITY * dt;
+}
+
+void CSniper::GetHit(int damage)
+{
+	SetState(SNIPER_STATE_DIE);
 }
 
 void CSniper::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	vy = 0;
 }

@@ -20,6 +20,7 @@
 #include "HIddenAirCraft.h"
 #include "NormalExplosion.h"
 #include "ObjectExplosion.h"
+#include "debug.h"
 
 using namespace std;
 extern CBill* bill;
@@ -271,7 +272,7 @@ void CPlayScene::Load()
 
 		if (line[0] == '#') continue;	// skip comment lines	
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
-		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; QuadTree = new TreeNode(0, CGame::GetInstance()->GetCamY(), current_map->GetMapWidth(), current_map->GetMapWidth()); continue;};
+		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; QuadTree = new TreeNode(0, CGame::GetInstance()->GetCamY(), current_map->GetMapWidth(), current_map->GetMapWidth()); continue; };
 		if (line == "[TILEMAP]") { section = SCENE_SECTION_TILEMAP_DATA; continue; }
 		if (line == "[HIDDENMAP]") { section = SCENE_SECTION_TILEMAP_HIDDEN; continue; }
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
@@ -340,19 +341,19 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy += game->GetBackBufferHeight() / 2;
 
-	//if (cx < 0) cx = 0;
-	//if (cx + game->GetBackBufferWidth() > current_map->GetMapWidth()) cx = current_map->GetMapWidth() - game->GetBackBufferWidth();
+	if (cx < 0) cx = 0;
+	if (cx + game->GetBackBufferWidth() > current_map->GetMapWidth()) cx = current_map->GetMapWidth() - game->GetBackBufferWidth();
 
 
 	D3DXVECTOR2 cam;
 	game->GetCamPos(cam.x, cam.y);
-	if (cy - game->GetBackBufferHeight() < 0) cy = current_map->GetMapHeight();
+
+	if (cy - game->GetBackBufferHeight() < 0) cy = cam.y;
 	if (cy > current_map->GetMapHeight()) cy = current_map->GetMapHeight();
 
-	if (cx < 0) cx = 0;
-
+	//if (cx < 0) cx = 0;
+	//DebugOut(L"cam y: %d\n", cy);
 	CGame::GetInstance()->SetCamPos(cx, cy);
-
 	PurgeDeletedObjects();
 }
 
